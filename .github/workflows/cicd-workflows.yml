@@ -14,7 +14,7 @@ jobs:
   test:
     name: Testing
     #RUNNER
-    runs-on: win10-self-runner
+    runs-on: self-hosted
     #JOB STEP
     steps:
       # checkout repo
@@ -40,7 +40,7 @@ jobs:
   build:
     needs: test
     name: Build
-    runs-on: win10-self-runner
+    runs-on: self-hosted
     # job steps
     steps:
       # checkout repo under $github_workspace, accesible by workflow
