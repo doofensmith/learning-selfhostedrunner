@@ -57,9 +57,35 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      # Run Build Package
+      # Run Build Package if Runner Windows:
       - name: Run Build Package
         run:
-          mvn clean package -Dmaven.test.skip=true
+          mvn clean package `-Dmaven.test.skip=true
+#      # Run Build Package if Runner Linux:
+#      - name: Run Build Package
+#        run:
+#          mvn clean package -Dmaven.test.skip=true
 
 #3RD JOB DEPLOY
+#  deploy_local:
+#    needs: build
+#    name: Deploy to Local Server
+#    runs-on: self-hosted
+#    #job steps
+#    steps:
+#      # checkout repo under $github_workspace, accesible by workflow
+#      - uses: actions/checkout@v3
+#      # set up JDK
+#      - uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#      # set up maven cache
+#      - name: Cache Maven Package
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      # run project
+#      - name: Run Project
