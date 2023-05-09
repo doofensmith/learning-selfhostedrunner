@@ -10,68 +10,39 @@ on:
 
 #DEFINE JOBS:
 jobs:
-#  #1ST JOB TESTING
-#  test:
-#    name: Unit Testing
-#    #RUNNER
-#    runs-on: self-hosted
-#    #JOB STEP
-#    steps:
-#      # checkout repo
-#      - uses: actions/checkout@v3
-#      # set up JDK
-#      - uses: actions/setup-java@v3
-#        with:
-#          distribution: 'temurin'
-#          java-version: '17'
-#      # set up maven cache
-#      - name: Cache Maven Package
-#        #This action allows caching dependencies and build outputs to improve workflow execution time.
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: ${{ runner.os }}-m2
-#      # Run Test
-#      - name: Run Tests
-#        run:
-#          mvn clean verify
-#
-#  #2ND JOB BUILD PROJECT
-#  build:
-#    needs: test
-#    name: Build
-#    runs-on: self-hosted
-#    # job steps
-#    steps:
-#      # checkout repo under $github_workspace, accesible by workflow
-#      - uses: actions/checkout@v3
-#      # set up JDK
-#      - uses: actions/setup-java@v3
-#        with:
-#          distribution: 'temurin'
-#          java-version: '17'
-#      # set up maven cache
-#      - name: Cache Maven Package
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: ${{ runner.os }}-m2
-#      # Run Build Package if Runner Windows:
-#      - name: Run Build Package
-#        run:
-#          mvn clean package `-Dmaven.test.skip=true
-##      # Run Build Package if Runner Linux:
-##      - name: Run Build Package
-##        run:
-##          mvn clean package -Dmaven.test.skip=true
-
-  #3RD JOB DEPLOY
-  deploy_local:
-    name: Deploy to Local Server
+  #1ST JOB TESTING
+  test:
+    name: Unit Testing
+    #RUNNER
     runs-on: self-hosted
-    #job steps
+    #JOB STEP
+    steps:
+      # checkout repo
+      - uses: actions/checkout@v3
+      # set up JDK
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      # set up maven cache
+      - name: Cache Maven Package
+        #This action allows caching dependencies and build outputs to improve workflow execution time.
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      # Run Test
+      - name: Run Tests
+        run:
+          mvn clean verify
+
+  #2ND JOB BUILD PROJECT
+  build:
+    needs: test
+    name: Build and Run
+    runs-on: self-hosted
+    # job steps
     steps:
       # checkout repo under $github_workspace, accesible by workflow
       - uses: actions/checkout@v3
@@ -87,7 +58,15 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      # Run Build Package if Runner Windows:
+      - name: Run Build Package
+        run:
+          mvn clean package `-Dmaven.test.skip=true
       # run project
       - name: Run Project
-        run: |
+        run:
           java -jar target/jpaspec-0.0.1-SNAPSHOT.jar
+#      # Run Build Package if Runner Linux:
+#      - name: Run Build Package
+#        run:
+#          mvn clean package -Dmaven.test.skip=true
