@@ -67,7 +67,7 @@ jobs:
       - name: Run Project
         shell: cmd
         run: |
-          start cmd /c "./run.bat"
+          start run.bat
 #      # Run Build Package if Runner Linux:
 #      - name: Run Build Package
 #        run:
