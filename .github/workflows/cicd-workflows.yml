@@ -65,9 +65,9 @@ jobs:
           mvn clean package `-Dmaven.test.skip=true
       # run project
       - name: Run Project
-        shell: cmd
+        shell: powershell
         run:
-          start cmd /c "java -jar target/jpaspec-0.0.1-SNAPSHOT.jar > log.txt 2>&1"
+          start java -jar target/jpaspec-0.0.1-SNAPSHOT.jar > log.txt 2>&1
 #      # Run Build Package if Runner Linux:
 #      - name: Run Build Package
 #        run:
