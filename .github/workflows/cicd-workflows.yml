@@ -25,13 +25,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       # set up maven cache
-      - name: Cache Maven Package
-        #This action allows caching dependencies and build outputs to improve workflow execution time.
+      - name: Cache local Maven repository
         uses: actions/cache@v3
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       # Run Test
       - name: Run Tests
         run:
@@ -52,12 +52,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       # set up maven cache
-      - name: Cache Maven Package
+      - name: Cache local Maven repository
         uses: actions/cache@v3
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       # Run Build Package if Runner Windows:
       - name: Run Build Package
         run:
@@ -66,7 +67,7 @@ jobs:
       - name: Run Project
         shell: cmd
         run:
-          start ./run.bat
+          start run.bat
 #      # Run Build Package if Runner Linux:
 #      - name: Run Build Package
 #        run:
