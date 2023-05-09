@@ -1,1 +1,65 @@
+#TRIGGER
+name: CI-CD Pipeline
+on:
+  #MANUAl TRIGGER
+  workflow_dispatch:
+  #TIGGER ON PUSH BRANCH MASTER
+  push:
+    branch:
+      - master
 
+#DEFINE JOBS:
+jobs:
+  #1ST JOB TESTING
+  test:
+    name: Testing
+    #RUNNER
+    runs-on: tes
+    #JOB STEP
+    steps:
+      # checkout repo
+      - uses: actions/checkout@v3
+      # set up JDK
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      # set up maven cache
+      - name: Cache Maven Package
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      # Run Test
+      - name: Run Tests
+        run:
+          mvn clean verify
+
+  #2ND JOB BUILD PROJECT
+  build:
+    needs: test
+    name: Build
+    runs-on: tes
+    # job steps
+    steps:
+      # checkout repo under $github_workspace, accesible by workflow
+      - uses: actions/checkout@v3
+      # set up JDK
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      # set up maven cache
+      - name: Cache Maven Package
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      # Run Build Package
+      - name: Run Build Package
+        run:
+          mvn clean package -Dmaven.test.skip=true
+
+#3RD JOB DEPLOY
