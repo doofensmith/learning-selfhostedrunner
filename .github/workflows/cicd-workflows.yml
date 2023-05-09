@@ -69,7 +69,6 @@ jobs:
 
   #3RD JOB DEPLOY
   deploy_local:
-    needs: build
     name: Deploy to Local Server
     runs-on: self-hosted
     #job steps
