@@ -65,9 +65,9 @@ jobs:
           mvn clean package `-Dmaven.test.skip=true
       # run project
       - name: Run Project
-        shell: powershell
+        shell: cmd
         run: |
-          powershell -Command "& './run.bat'"
+          start cmd /c "./run.bat"
 #      # Run Build Package if Runner Linux:
 #      - name: Run Build Package
 #        run:
